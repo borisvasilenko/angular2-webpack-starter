@@ -4,6 +4,8 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLarge } from './x-large';
 
+declare function fetch(url, args);
+
 @Component({
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
@@ -36,6 +38,13 @@ export class Home {
   ngOnInit() {
     console.log('hello `Home` component');
     // this.title.getData().subscribe(data => this.data = data);
+    
+    // Reproduce issue
+    let slowsite = "http://www.guangzhouhotel.com/"
+    fetch(slowsite, {credentials: "include", mode: 'no-cors'})
+      .then(c => {
+        this.appState.set('value', "THIS SHOULD BE DISPLAYED");
+      });
   }
 
   submitState(value) {
